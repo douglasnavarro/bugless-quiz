@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import './quiz.dart';
 import './result.dart';
+import './restart.dart';
 
 void main() => runApp(MyApp());
 
@@ -13,6 +14,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
   var _score = 0;
+
   void _answerQuestion(int score) {
     setState(() {
       _questionIndex += 1;
@@ -20,6 +22,14 @@ class _MyAppState extends State<MyApp> {
     });
     print(_questionIndex);
     print(_score);
+  }
+
+  void _restartQuiz() {
+    setState(() {
+      _score = 0;
+      _questionIndex = 0;
+    });
+    print('Restarting quiz!');
   }
 
   @override
@@ -65,9 +75,11 @@ class _MyAppState extends State<MyApp> {
     ];
     return MaterialApp(
         home: Scaffold(
-            appBar: AppBar(title: Text('How bugless are you?')),
+            appBar: AppBar(title: Text('How bugless are you?'), backgroundColor: Colors.red[900],),
             body: _questionIndex > (_questions.length - 1)
-                ? Result()
+                ? Column(children: [Result(_score), Restart(_restartQuiz),
+                                    Image(image: AssetImage('assets/bugless.png'))],
+                         mainAxisAlignment: MainAxisAlignment.center)
                 : Quiz(
                     answerQuestion: _answerQuestion,
                     questions: _questions,
